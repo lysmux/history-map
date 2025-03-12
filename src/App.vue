@@ -4,6 +4,7 @@
 import { provide, ref, readonly } from 'vue'
 import { RouterView } from 'vue-router'
 import Header from './components/AppHeader.vue'
+import Sidebar from './components/Sidebar.vue'
 
 import type { Place } from './types/Place.d'
 
@@ -26,6 +27,13 @@ places.value = Object.values(modules)
   }) as Place[]
 
 provide('places', readonly(places))
+
+//========= Sidebar stuff ============
+const isSidebarVisible = ref(true);
+const toggleSidebar = () => {
+    isSidebarVisible.value = !isSidebarVisible.value;
+  };
+  
 </script>
 
 <template>
@@ -33,4 +41,11 @@ provide('places', readonly(places))
     <Header />
     <RouterView />
   </div>
+  <div class="flex flex-1 overflow-hidden relative">
+      <Sidebar
+        :is-visible="isSidebarVisible"
+        :places="places"
+        @toggle-sidebar="toggleSidebar"
+      />
+    </div>
 </template>

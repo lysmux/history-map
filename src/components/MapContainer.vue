@@ -10,6 +10,7 @@ const { places } = defineProps<{ places: Place[] }>()
 const emit = defineEmits(['selectPlace'])
 
 const mapRef = ref<HTMLDivElement>()
+const mapInstance = ref<L.Map>()
 
 onMounted(() => {
   const map = L.map(mapRef.value as HTMLDivElement).setView([59.957355, 30.310198], 13)
@@ -39,6 +40,17 @@ onMounted(() => {
     marker.on('click', () => emit('selectPlace', place))
   })
 })
+
+  // Expose a method to pan the map to a specific location
+  const panToLocation = (latitude: number, longitude: number) => {
+    if (mapInstance.value) {
+      mapInstance.value.setView([latitude, longitude], 13)
+    }
+  }
+  
+  // Expose the panToLocation method to the parent component
+  defineExpose({ panToLocation })
+
 </script>
 
 <template>
